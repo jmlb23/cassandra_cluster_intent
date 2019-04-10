@@ -1,0 +1,89 @@
+version: "3"
+services:
+        node:
+                privileged: true
+                hostname: node
+                
+                build:
+                        context: .
+                        dockerfile: Dockerfile
+                expose:
+                        - "1-65535"
+                networks:
+                        comon:
+                                ipv4_address: 172.29.0.2
+                                aliases:
+                                        - node
+                extra_hosts:
+                        - "node1:172.29.0.7"
+                        - "node2:172.29.0.4"
+                        - "node3:172.29.0.5"
+                tty: true
+        node1:
+                privileged: true
+                hostname: node1
+                
+                build:
+                        context: .
+                        dockerfile: Dockerfile
+                expose:
+                        - "1-65535"
+                networks:
+                         comon:
+                                ipv4_address: 172.29.0.7
+                                aliases:
+                                        - node1
+                extra_hosts:
+                        - "node:172.29.0.2"
+                        - "node2:172.29.0.4"
+                        - "node3:172.29.0.5"
+
+                tty: true
+        node2:
+                privileged: true
+                hostname: node2
+                
+                build:
+                        context: .
+                        dockerfile: Dockerfile
+                expose:
+                        - "1-65535"
+                networks:
+                        comon:
+                                ipv4_address: 172.29.0.4
+                                aliases:
+                                        - node2
+                extra_hosts:
+                        - "node:172.29.0.2"
+                        - "node3:172.29.0.5"
+                        - "node1:172.29.0.7"
+
+                tty: true
+        node3:
+                privileged: true
+                hostname: node3
+                
+                build:
+                        context: .
+                        dockerfile: Dockerfile
+                expose:
+                        - "1-65535"
+                networks:
+                        comon:
+                                ipv4_address: 172.29.0.5
+                                aliases:
+                                        - node3
+                extra_hosts:
+                        - "node2:172.29.0.4"
+                        - "node:172.29.0.2"
+                        - "node1:172.29.0.7"
+
+
+                tty: true
+networks:
+        comon:
+                driver: bridge
+                ipam:
+                        driver: default
+                        config:
+                                - subnet: 172.29.0.0/16
